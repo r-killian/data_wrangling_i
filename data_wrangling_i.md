@@ -208,3 +208,20 @@ This is where we tried to read a SAS file
 ``` r
 pulse_df = read_sas("data/public_pulse_data.sas7bdat")
 ```
+
+## Why to never use `read.csv`
+
+``` r
+litters_df_base = read.csv("data/FAS_litters.csv")
+```
+
+This does not print out as a tibble! (We like `tibble` its nice) Also
+read.csv has some old issues in how it reads in variables
+
+## How to export
+
+there’s a way!
+
+``` r
+write_csv(fellow_df, "data/fellowship_words.csv")
+```
