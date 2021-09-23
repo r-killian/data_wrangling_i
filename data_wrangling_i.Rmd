@@ -1,0 +1,47 @@
+---
+title: "Data Wrangling I"
+output: github_document
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(tidyverse)
+```
+
+## Import some data
+
+I want to import `FAS_litters.csv`, 
+
+```{r}
+litters_df = read_csv("data/FAS_litters.csv")
+```
+
+Dataset imported. Now we want better names.
+
+```{r}
+names(litters_df)
+
+litters_df = janitor::clean_names(litters_df)
+```
+
+Now we have better names (snake_case). Lets look at the dataset
+
+```{r}
+litters_df
+
+head(litters_df, 20)
+tail(litters_df)
+```
+
+One used a lot is:
+Eval set to false so as not to cause issues when knitting
+
+```{r, eval = FALSE}
+view(litters_df)
+```
+
+Here's skim
+
+```{r}
+skimr::skim(litters_df)
+```
+
