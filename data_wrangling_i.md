@@ -186,3 +186,25 @@ litters_data = read_csv(file = "./data/FAS_litters.csv",
 
 Can also specify individuals columns type no need to list every column
 when only on returns a parse error
+
+## Reading From Excel
+
+Reading MLB data
+
+``` r
+mlb11_df = read_excel("data/mlb11.xlsx")
+```
+
+Now LotR Words is next
+
+``` r
+fellow_df = read_excel("data/LotR_Words.xlsx", range = "B3:D6")
+```
+
+## Read a SAS file
+
+This is where we tried to read a SAS file
+
+``` r
+pulse_df = read_sas("data/public_pulse_data.sas7bdat")
+```
