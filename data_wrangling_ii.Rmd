@@ -14,12 +14,40 @@ library(tidyverse)
 ```{r}
 options(tibble.print_min = 3)
 
-litters_data = read_csv("./data/FAS_litters.csv",
-  col_types = "ccddiiii")
+litters_data = read_csv("./data/FAS_litters.csv")
 litters_data = janitor::clean_names(litters_data)
 
-pups_data = read_csv("./data/FAS_pups.csv",
- col_types = "ciiiii")
+pups_data = read_csv("./data/FAS_pups.csv")
 pups_data = janitor::clean_names(pups_data)
+```
+
+## `select`
+
+lets select some columns.
+
+```{r}
+select(litters_data, group, litter_number)
+select(litters_data, group, gd0_weight, gd18_weight)
+
+select(litters_data, group, gd0_weight:gd_of_birth)
+select(litters_data, group, starts_with("pups"))
+
+select(litters_data, -litter_number)
+
+select(litters_data, GROUP = group, litter_number)
+
+rename(litters_data, GROUP = group)
+
+select(litters_data, litter_number, everything())
+
+relocate(litters_data, litter_number)
+```
+
+## Learning Assessment
+
+Learning Assessment: In the pups data, select the columns containing litter number, sex, and PD ears
+
+```{r}
+select(pups_data, litter_number, sex, pd_ears)
 ```
 
