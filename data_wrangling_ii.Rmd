@@ -51,3 +51,49 @@ Learning Assessment: In the pups data, select the columns containing litter numb
 select(pups_data, litter_number, sex, pd_ears)
 ```
 
+## `filter`
+
+Getting rid of rows
+
+```{r}
+filter(litters_data, gd_of_birth == 20)
+filter(litters_data, group == "Con7")
+
+filter(litters_data, gd0_weight < 23)
+
+filter(litters_data, pups_survive != 4)
+
+filter(litters_data, !(group == "Con7"))
+
+filter(litters_data, group %in% c("Con7", "COn8"))
+
+filter(litters_data, group == "Con7", gd_of_birth == 20)
+
+filter(litters_data, group == "Con7" | gd_of_birth == 20)
+
+drop_na(litters_data)
+drop_na(litters_data, gd0_weight)
+```
+
+## `mutate`
+
+Adding/changing columns
+
+```{r}
+mutate(litters_data, weight_change = gd18_weight - gd0_weight)
+
+mutate(
+  litters_data,
+  weight_change = gd18_weight - gd0_weight,
+  group = str_to_lower(group)
+)
+```
+
+## `arrange`
+
+rearrangement
+
+```{r}
+arrange(litters_data, gd_of_birth, gd0_weight)
+```
+
