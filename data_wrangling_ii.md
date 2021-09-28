@@ -388,3 +388,51 @@ arrange(litters_data, gd_of_birth, gd0_weight)
     ## 3 Mod7  #103                21.4        42.1          19               9
     ## # ... with 46 more rows, and 2 more variables: pups_dead_birth <dbl>,
     ## #   pups_survive <dbl>
+
+## Pipes
+
+``` r
+litters_df = 
+  read_csv("data/FAS_litters.csv") %>%
+  janitor::clean_names() %>%
+  select(group, pups_survive) %>%
+  filter(group == "Con7")
+```
+
+    ## Rows: 49 Columns: 8
+
+    ## -- Column specification --------------------------------------------------------
+    ## Delimiter: ","
+    ## chr (2): Group, Litter Number
+    ## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+
+    ## 
+    ## i Use `spec()` to retrieve the full column specification for this data.
+    ## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+litters_df = 
+  read_csv("data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-pups_survive) %>% 
+  mutate(
+    weight_change = gd18_weight - gd0_weight,
+    group = str_to_lower(group)
+  ) %>% 
+  drop_na(weight_change) %>% 
+  filter(group %in% c("Con7", "COn8")) %>% 
+  select(litter_number, group, weight_change, everything())
+```
+
+    ## Rows: 49 Columns: 8
+
+    ## -- Column specification --------------------------------------------------------
+    ## Delimiter: ","
+    ## chr (2): Group, Litter Number
+    ## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+
+    ## 
+    ## i Use `spec()` to retrieve the full column specification for this data.
+    ## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+Shortcut for %&gt;% is shift+ctrl+M
