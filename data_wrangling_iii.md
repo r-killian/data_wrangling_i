@@ -88,3 +88,58 @@ analysis_df %>%
 |:----------|----:|----:|
 | treatment |   4 |   8 |
 | control   |   3 |   6 |
+
+## `bind_rows`
+
+Import LotR movies excel file
+
+``` r
+fellowship_df = 
+  read_excel("data/LotR_Words.xlsx", range = "B3:D6") %>% 
+  mutate(movie = "fellowship_rings")
+
+two_towers_df = 
+  read_excel("data/LotR_Words.xlsx", range = "F3:H6") %>% 
+  mutate(movie = "two_towers")
+
+return_df = 
+  read_excel("data/LotR_Words.xlsx", range = "J3:L6") %>% 
+  mutate(movie = "return_king")
+
+lotr_df = 
+  bind_rows(fellowship_df, two_towers_df, return_df) %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    female:male,
+    names_to = "sex",
+    values_to = "words"
+  ) %>% 
+  relocate(movie)
+
+lotr_df
+```
+
+    ## # A tibble: 18 x 4
+    ##    movie            race   sex    words
+    ##    <chr>            <chr>  <chr>  <dbl>
+    ##  1 fellowship_rings Elf    female  1229
+    ##  2 fellowship_rings Elf    male     971
+    ##  3 fellowship_rings Hobbit female    14
+    ##  4 fellowship_rings Hobbit male    3644
+    ##  5 fellowship_rings Man    female     0
+    ##  6 fellowship_rings Man    male    1995
+    ##  7 two_towers       Elf    female   331
+    ##  8 two_towers       Elf    male     513
+    ##  9 two_towers       Hobbit female     0
+    ## 10 two_towers       Hobbit male    2463
+    ## 11 two_towers       Man    female   401
+    ## 12 two_towers       Man    male    3589
+    ## 13 return_king      Elf    female   183
+    ## 14 return_king      Elf    male     510
+    ## 15 return_king      Hobbit female     2
+    ## 16 return_king      Hobbit male    2673
+    ## 17 return_king      Man    female   268
+    ## 18 return_king      Man    male    2459
+
+`rbind()` is also a command that binds rows, but use `bind_rows()` (its
+better)
