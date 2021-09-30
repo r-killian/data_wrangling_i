@@ -3,20 +3,6 @@ Data wrangling iii: tidy data
 
 ``` r
 library(tidyverse)
-```
-
-    ## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
-
-    ## v ggplot2 3.3.5     v purrr   0.3.4
-    ## v tibble  3.1.4     v dplyr   1.0.7
-    ## v tidyr   1.1.3     v stringr 1.4.0
-    ## v readr   2.0.1     v forcats 0.5.1
-
-    ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
-``` r
 library(readxl)
 library(haven)
 ```
@@ -26,4 +12,79 @@ library(haven)
 ``` r
 pulse_df = 
   haven::read_sas("./data/public_pulse_data.sas7bdat") %>% janitor::clean_names()
+
+pulse_df
 ```
+
+    ## # A tibble: 1,087 x 7
+    ##       id   age sex    bdi_score_bl bdi_score_01m bdi_score_06m bdi_score_12m
+    ##    <dbl> <dbl> <chr>         <dbl>         <dbl>         <dbl>         <dbl>
+    ##  1 10003  48.0 male              7             1             2             0
+    ##  2 10015  72.5 male              6            NA            NA            NA
+    ##  3 10022  58.5 male             14             3             8            NA
+    ##  4 10026  72.7 male             20             6            18            16
+    ##  5 10035  60.4 male              4             0             1             2
+    ##  6 10050  84.7 male              2            10            12             8
+    ##  7 10078  31.3 male              4             0            NA            NA
+    ##  8 10088  56.9 male              5            NA             0             2
+    ##  9 10091  76.0 male              0             3             4             0
+    ## 10 10092  74.2 female           10             2            11             6
+    ## # ... with 1,077 more rows
+
+Let’s try to pivot (also remove prefix and mutate)
+
+``` r
+pulse_tidy = 
+  pulse_df %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit",
+    names_prefix = "bdi_score_",
+    values_to = "bdi"
+  ) %>% 
+  mutate(
+    visit = replace(visit, visit == "bl", "00m")
+  )
+
+pulse_tidy
+```
+
+    ## # A tibble: 4,348 x 5
+    ##       id   age sex   visit   bdi
+    ##    <dbl> <dbl> <chr> <chr> <dbl>
+    ##  1 10003  48.0 male  00m       7
+    ##  2 10003  48.0 male  01m       1
+    ##  3 10003  48.0 male  06m       2
+    ##  4 10003  48.0 male  12m       0
+    ##  5 10015  72.5 male  00m       6
+    ##  6 10015  72.5 male  01m      NA
+    ##  7 10015  72.5 male  06m      NA
+    ##  8 10015  72.5 male  12m      NA
+    ##  9 10022  58.5 male  00m      14
+    ## 10 10022  58.5 male  01m       3
+    ## # ... with 4,338 more rows
+
+## `pivot_wider`
+
+lets make up a results data table
+
+``` r
+analysis_df = 
+  tibble(
+    group = c("treatment", "treatment", "control", "control"),
+    time = c("a", "b", "a", "b"),
+    group_mean = c(4, 8, 3, 6)
+  )
+
+analysis_df %>% 
+  pivot_wider(
+    names_from = "time",
+    values_from = "group_mean"
+  ) %>% 
+  knitr::kable()
+```
+
+| group     |   a |   b |
+|:----------|----:|----:|
+| treatment |   4 |   8 |
+| control   |   3 |   6 |
